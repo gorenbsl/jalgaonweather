@@ -3,31 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jalgaon Taluka Temperatures</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-    th { background-color: #eee; }
-    @media (max-width: 600px) {
-      table, thead, tbody, th, td, tr { display: block; }
-      th { text-align: right; }
-    }
-  </style>
+  <title>Jalgaon Weather</title>
 </head>
 <body>
-  <h1>🌡️ Jalgaon Talukas – Max Temperatures</h1>
-  <p>This will dynamically show max temperature from AccuWeather API.</p>
-  <table>
-    <thead>
-      <tr><th>Taluka</th><th>Max Temperature (°C)</th></tr>
-    </thead>
-    <tbody id="tempTable">
-      <tr><td>Loading...</td><td>--</td></tr>
-    </tbody>
-  </table>
+  <h1>Jalgaon City Weather</h1>
+  <p id="weather">Loading...</p>
 
-  <script src="locationKeys.js"></script>
-  <script src="getTemperatures.js"></script>
+  <script>
+    fetch("https://dataservice.accuweather.com/currentconditions/v1/189308?apikey=AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9")
+      .then(response => response.json())
+      .then(data => {
+        const temp = data[0].Temperature.Metric.Value;
+        const text = data[0].WeatherText;
+        document.getElementById("weather").innerText = `Temperature: ${temp}°C, Condition: ${text}`;
+      })
+      .catch(error => {
+        document.getElementById("weather").innerText = "Error fetching weather data.";
+        console.error(error);
+      });
+  </script>
 </body>
 </html>
