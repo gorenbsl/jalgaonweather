@@ -31,7 +31,7 @@ async function getTemperatures() {
 getTemperatures();
 
 // तापमान मिळवणारी स्क्रिप्ट
-const apiKey = "तुमचा_API_KEY"; // ← इथे तुमचा AccuWeather API Key टाका
+const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9"; // ← इथे तुमचा AccuWeather API Key टाका
 
 async function fetchTemperatures() {
   const results = [];
