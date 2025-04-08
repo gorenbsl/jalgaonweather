@@ -2,24 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jalgaon Weather</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #6dd5fa, #2980b9);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .weather-info {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .loading {
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Jalgaon City Weather</h1>
-  <p id="weather">Loading...</p>
+  <div class="container">
+    <h1>🌦️ Jalgaon Weather</h1>
+    <div id="weather" class="weather-info loading">Loading current weather...</div>
+  </div>
 
   <script>
-    fetch("https://dataservice.accuweather.com/currentconditions/v1/189308?apikey=AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9")
+    const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9";
+    const locationKey = "189308"; // Jalgaon location key
+    const weatherDiv = document.getElementById("weather");
+
+    fetch(`https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apiKey}`)
       .then(response => response.json())
       .then(data => {
-        const temp = data[0].Temperature.Metric.Value;
-        const text = data[0].WeatherText;
-        document.getElementById("weather").innerText = `Temperature: ${temp}°C, Condition: ${text}`;
+        if (data && data[0]) {
+          const { WeatherText, Temperature } = data[0];
+          const tempC = Temperature.Metric.Value;
+          weatherDiv.innerHTML = `Currently: <strong>${WeatherText}</strong><br>Temperature: <strong>${tempC}°C</strong>`;
+          weatherDiv.classList.remove("loading");
+        } else {
+          weatherDiv.innerHTML = "Unable to load weather data.";
+        }
       })
-      .catch(error => {
-        document.getElementById("weather").innerText = "Error fetching weather data.";
-        console.error(error);
+      .catch(err => {
+        console.error(err);
+        weatherDiv.innerHTML = "Error fetching weather data.";
       });
   </script>
 </body>
