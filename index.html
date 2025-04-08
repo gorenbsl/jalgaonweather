@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jalgaon Taluka Temperatures</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #eee; }
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      th { text-align: right; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌡️ Jalgaon Talukas – Max Temperatures</h1>
+  <p>This will dynamically show data once integrated with backend or JSON source.</p>
+  <table>
+    <thead>
+      <tr><th>Taluka</th><th>Max Temperature (°C)</th></tr>
+    </thead>
+    <tbody id="tempTable">
+      <tr><td>Loading...</td><td>--</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>
