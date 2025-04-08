@@ -2,81 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jalgaon Weather</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jalgaon Weather - जळगाव हवामान</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #e0f7fa, #fff);
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #6dd5fa, #2980b9);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      padding: 20px;
       text-align: center;
+      color: #333;
     }
-
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2rem;
+    .card {
+      background: white;
+      padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
       max-width: 400px;
-      width: 90%;
+      margin: 40px auto;
     }
-
     h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
-
-    .weather-info {
-      font-size: 1.2rem;
-      margin-top: 1rem;
+    .info {
+      font-size: 18px;
+      margin: 10px 0;
     }
-
-    .loading {
-      font-size: 1rem;
-      opacity: 0.7;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.5rem;
-      }
+    .emoji {
+      font-size: 28px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🌦️ Jalgaon Weather</h1>
-    <div id="weather" class="weather-info loading">Loading current weather...</div>
+  <div class="card">
+    <h1>🌦️ Jalgaon Weather - जळगाव हवामान</h1>
+    <div id="weather" class="info">Loading...</div>
   </div>
 
   <script>
-    const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9";
-    const locationKey = "189308"; // Jalgaon location key
-    const weatherDiv = document.getElementById("weather");
+    async function fetchWeather() {
+      try {
+        const response = await fetch(
+          "https://dataservice.accuweather.com/currentconditions/v1/189308?apikey=AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9"
+        );
+        const data = await response.json();
+        const weather = data[0];
 
-    fetch(`https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data && data[0]) {
-          const { WeatherText, Temperature } = data[0];
-          const tempC = Temperature.Metric.Value;
-          weatherDiv.innerHTML = `Currently: <strong>${WeatherText}</strong><br>Temperature: <strong>${tempC}°C</strong>`;
-          weatherDiv.classList.remove("loading");
-        } else {
-          weatherDiv.innerHTML = "Unable to load weather data.";
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        weatherDiv.innerHTML = "Error fetching weather data.";
-      });
+        // Extract info
+        const englishText = weather.WeatherText;
+        const temperature = weather.Temperature.Metric.Value;
+        const humidity = weather.RelativeHumidity;
+
+        // Marathi translations (simple static mapping for now)
+        const marathiWeatherMap = {
+          "Sunny": "सूर्यप्रकाश",
+          "Partly Sunny": "अंशतः उन्हाळी",
+          "Cloudy": "ढगाळ",
+          "Mostly Cloudy": "बहुतेक ढगाळ",
+          "Rain": "पाऊस",
+          "Showers": "सारखा पाऊस",
+          "Hazy": "धुरकट",
+          "Fog": "धुके",
+          "Clear": "स्वच्छ"
+        };
+
+        const marathiText = marathiWeatherMap[englishText] || "हवामान माहिती";
+
+        document.getElementById("weather").innerHTML = `
+          <div class="emoji">🌤️</div>
+          <div>Currently: ${englishText} <br> सध्या: ${marathiText}</div>
+          <div>Temperature: ${temperature}°C <br> तापमान: ${temperature}°से</div>
+          <div>Humidity: ${humidity}% <br> आर्द्रता: ${humidity}%</div>
+        `;
+      } catch (error) {
+        document.getElementById("weather").textContent = "Failed to load weather data.";
+      }
+    }
+
+    fetchWeather();
   </script>
 </body>
 </html>
