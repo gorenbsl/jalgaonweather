@@ -33,15 +33,19 @@
 </head>
 <body>
   <div class="card" id="jalgaon">
-    <h1>🌦️ Jalgaon Weather - जळगाव</h1>
+    <h1> जळगाव</h1>
     <div class="info" id="jalgaon-weather">Loading...</div>
   </div>
 
   <div class="card" id="bhusawal">
-    <h1>🌤️ Bhusawal Weather - भुसावळ</h1>
+    <h1> भुसावळ</h1>
     <div class="info" id="bhusawal-weather">Loading...</div>
   </div>
 
+   <div class="card" id="amalner">
+    <h1> अमळनेर </h1>
+    <div class="info" id="amalner-weather">Loading...</div>
+  </div>
   <script>
     const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9";
 
@@ -63,6 +67,7 @@
     // Call for both towns
     fetchWeather("189308", "jalgaon-weather", "Jalgaon");  // Jalgaon
     fetchWeather("189307", "bhusawal-weather", "Bhusawal"); // Bhusawal (update with real key if needed)
+fetchWeather("194354", "amalner-weather", "amalner");  // amalner 
   </script>
 </body>
 </html>
