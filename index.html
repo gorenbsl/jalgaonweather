@@ -13,138 +13,126 @@
       text-align: center;
       color: #333;
     }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .tab-button {
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      background-color: #01579b;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
     .card {
       background: white;
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      max-width: 200px;
-      margin: 40px auto;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
+      max-width: 400px;
+      margin: 20px auto;
     }
     .info {
       font-size: 18px;
-      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <div class="card" id="jalgaon">
-    <h1>Jalgaon </h1>
-    <div class="info" id="jalgaon-weather">Loading...</div>
+  <div class="tabs">
+    <button class="tab-button active" onclick="showTab('jalgaon-tab')">जळगाव जिल्हा</button>
+    <button class="tab-button" onclick="showTab('khandesh-tab')">कान्हदेश</button>
   </div>
 
-  <div class="card" id="bhusawal">
-    <h1>Bhusawal </h1>
-    <div class="info" id="bhusawal-weather">Loading...</div>
+  <div id="jalgaon-tab" class="tab-content active">
+    <div class="card" id="jalgaon-weather">Jalgaon - Loading...</div>
+    <div class="card" id="bhusawal-weather">Bhusawal - Loading...</div>
+
+   <div class="card" id="amalner-weather">Amalner - Loading...</div>
+
+    
+    <div class="card" id="bodvad-weather">Bodvad - Loading...</div>
+    <div class="card" id="bhadgaon-weather">Bhadgaon - Loading...</div>
+    <div class="card" id="chalisgaon-weather">Chalisgaon - Loading...</div>
+    <div class="card" id="chopda-weather">Chopda - Loading...</div>
+    <div class="card" id="dharangaon-weather">Dharangaon - Loading...</div>
+    <div class="card" id="erandol-weather">Erandol - Loading...</div>
+    <div class="card" id="jamner-weather">Jamner - Loading...</div>
+    <div class="card" id="muktainagar-weather">Muktainagar - Loading...</div>
+    <div class="card" id="parola-weather">Parola - Loading...</div>
+    <div class="card" id="pachora-weather">Pachora - Loading...</div>
+    <div class="card" id="raver-weather">Raver - Loading...</div>
+    <div class="card" id="varangaon-weather">Varangaon - Loading...</div>
+    <div class="card" id="yawal-weather">Yawal - Loading...</div>
   </div>
 
-
-  <div class="card" id="amalner">
-    <h1>Amalner  </h1>
-    <div class="info" id="amalner-weather">Loading...</div>
-  </div>
-
-  
-  <div class="card" id="bodvad">
-    <h1>Bodvad </h1>
-    <div class="info" id="bodvad-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="bhadgaon">
-    <h1>Bhadgaon</h1>
-    <div class="info" id="bhadgaon-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="chalisgaon">
-    <h1>Chalisgaon</h1>
-    <div class="info" id="chalisgaon-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="chopda">
-    <h1>Chopda</h1>
-    <div class="info" id="chopda-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="dharangaon">
-    <h1>Dharangaon</h1>
-    <div class="info" id="dharangaon-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="erandol">
-    <h1>Erandol</h1>
-    <div class="info" id="erandol-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="jamner">
-    <h1>Jamner</h1>
-    <div class="info" id="jamner-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="muktainagar">
-    <h1>Muktainagar</h1>
-    <div class="info" id="muktainagar-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="parola">
-    <h1>Parola</h1>
-    <div class="info" id="parola-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="pachora">
-    <h1>Pachora</h1>
-    <div class="info" id="pachora-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="raver">
-    <h1>Raver</h1>
-    <div class="info" id="raver-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="varangaon">
-    <h1>Varangaon</h1>
-    <div class="info" id="varangaon-weather">Loading...</div>
-  </div>
-
-  <div class="card" id="yawal">
-    <h1>Yawal</h1>
-    <div class="info" id="yawal-weather">Loading...</div>
+  <div id="khandesh-tab" class="tab-content">
+    <div class="card" id="dhule-weather">Dhule - Loading...</div>
+    <div class="card" id="nashik-weather">Nashik - Loading...</div>
+    <div class="card" id="nandurbar-weather">Nandurbar - Loading...</div>
   </div>
 
   <script>
     const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9";
 
-    async function fetchWeather(locationKey, elementId, cityName) {
+    const cities = {
+      // Jalgaon District
+      "jalgaon-weather": "189308",
+      "bhusawal-weather": "189307",
+      "amalner-weather": "194354",
+      "bodvad-weather": "2753229",
+      "bhadgaon-weather": "204440",
+      "chalisgaon-weather": "189281",
+      "chopda-weather": "189408",
+      "dharangaon-weather": "189416",
+      "erandol-weather": "189417",
+      "jamner-weather": "204434",
+      "muktainagar-weather": "2750852",
+      "parola-weather": "189418",
+      "pachora-weather": "189426",
+      "raver-weather": "189407",
+      "varangaon-weather": "189424",
+      "yawal-weather": "189410",
+      // Khandesh
+      "dhule-weather": "189302",
+      "nashik-weather": "189304",
+      "nandurbar-weather": "189272"
+    };
+
+    async function fetchWeather(locationKey, elementId) {
       try {
-        const response = await fetch(`https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apiKey}`);
+        const response = await fetch(
+          `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apiKey}`
+        );
         const data = await response.json();
-        const weather = data[0];
-        const temperature = weather.Temperature.Metric.Value;
-        document.getElementById(elementId).innerHTML = `${cityName} - ${temperature}°C`;
+        const temperature = data[0].Temperature.Metric.Value;
+        document.getElementById(elementId).textContent = `${elementId.split('-')[0].charAt(0).toUpperCase() + elementId.split('-')[0].slice(1)} - ${temperature}°C`;
       } catch (error) {
-        document.getElementById(elementId).textContent = "Failed to load weather data.";
+        document.getElementById(elementId).textContent = "Failed to load weather.";
       }
     }
 
-    fetchWeather("189308", "jalgaon-weather", "Jalgaon");
-    fetchWeather("189307", "bhusawal-weather", "Bhusawal");
-    fetchWeather("194354", "amalner-weather", "amalner");
-    fetchWeather("2753229", "bodvad-weather", "Bodvad");
-    fetchWeather("204440", "bhadgaon-weather", "Bhadgaon");
-    fetchWeather("189281", "chalisgaon-weather", "Chalisgaon");
-    fetchWeather("189408", "chopda-weather", "Chopda");
-    fetchWeather("189416", "dharangaon-weather", "Dharangaon");
-    fetchWeather("189417", "erandol-weather", "Erandol");
-    fetchWeather("204434", "jamner-weather", "Jamner");
-    fetchWeather("2750852", "muktainagar-weather", "Muktainagar");
-    fetchWeather("189418", "parola-weather", "Parola");
-    fetchWeather("189426", "pachora-weather", "Pachora");
-    fetchWeather("189407", "raver-weather", "Raver");
-    fetchWeather("189424", "varangaon-weather", "Varangaon");
-    fetchWeather("189410", "yawal-weather", "Yawal");
+    Object.entries(cities).forEach(([elementId, locationKey]) => {
+      fetchWeather(locationKey, elementId);
+    });
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
   </script>
 </body>
 </html>
