@@ -23,65 +23,46 @@
     }
     h1 {
       font-size: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .info {
       font-size: 18px;
       margin: 10px 0;
     }
-    .emoji {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🌦️ Jalgaon Weather - जळगाव हवामान</h1>
-    <div id="weather" class="info">Loading...</div>
+  <div class="card" id="jalgaon">
+    <h1>🌦️ Jalgaon Weather - जळगाव</h1>
+    <div class="info" id="jalgaon-weather">Loading...</div>
+  </div>
+
+  <div class="card" id="bhusawal">
+    <h1>🌤️ Bhusawal Weather - भुसावळ</h1>
+    <div class="info" id="bhusawal-weather">Loading...</div>
   </div>
 
   <script>
-    async function fetchWeather() {
+    const apiKey = "AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9";
+
+    async function fetchWeather(locationKey, elementId, cityName) {
       try {
         const response = await fetch(
-          "https://dataservice.accuweather.com/currentconditions/v1/189308?apikey=AmpqFspNOVCRZdhjUXtuAOCWbKwT4Ok9"
+          `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apiKey}`
         );
         const data = await response.json();
         const weather = data[0];
 
-        // Extract info
-        const englishText = weather.WeatherText;
         const temperature = weather.Temperature.Metric.Value;
-        const humidity = weather.RelativeHumidity;
-
-        // Marathi translations (simple static mapping for now)
-        const marathiWeatherMap = {
-          "Sunny": "सूर्यप्रकाश",
-          "Partly Sunny": "अंशतः उन्हाळी",
-          "Cloudy": "ढगाळ",
-          "Mostly Cloudy": "बहुतेक ढगाळ",
-          "Rain": "पाऊस",
-          "Showers": "सारखा पाऊस",
-          "Hazy": "धुरकट",
-          "Fog": "धुके",
-          "Clear": "स्वच्छ"
-        };
-
-        const marathiText = marathiWeatherMap[englishText] || "हवामान माहिती";
-
-        document.getElementById("weather").innerHTML = `
-          <div class="emoji">🌤️</div>
-          <div>Currently: ${englishText} <br> सध्या: ${marathiText}</div>
-          <div>Temperature: ${temperature}°C <br> तापमान: ${temperature}°से</div>
-          <div>Humidity: ${humidity}% <br> आर्द्रता: ${humidity}%</div>
-        `;
+        document.getElementById(elementId).textContent = `${cityName} - ${temperature}°C`;
       } catch (error) {
-        document.getElementById("weather").textContent = "Failed to load weather data.";
+        document.getElementById(elementId).textContent = "Failed to load temperature.";
       }
     }
 
-    fetchWeather();
+    // Call for both towns
+    fetchWeather("189308", "jalgaon-weather", "Jalgaon");  // Jalgaon
+    fetchWeather("189307", "bhusawal-weather", "Bhusawal"); // Bhusawal (update with real key if needed)
   </script>
 </body>
 </html>
