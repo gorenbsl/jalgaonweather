@@ -138,8 +138,8 @@
       // Render Jalgaon tab
       jalgaonSorted.forEach((item, index) => {
         const city = item.elementId.split('-')[0];
-        const emoji = item.temperature > 37 ? " 🔥" : "";
-        const textClass = item.temperature > 37 ? "highlight" : "";
+        const emoji = item.temperature > 43 ? " 🔥" : "";
+        const textClass = item.temperature > 43 ? "highlight" : "";
         document.getElementById(item.elementId).innerHTML = `<span class="${textClass}">${city.charAt(0).toUpperCase() + city.slice(1)} - ${item.temperature}°C${emoji}</span>`;
       });
 
