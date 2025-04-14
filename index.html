@@ -53,6 +53,10 @@
 </head>
 <body>
   <div class="tabs">
+    <button onclick="copyJalgaonData()" style="margin-bottom: 20px; padding: 10px 20px; border-radius: 10px; background-color: #4caf50; color: white; border: none; cursor: pointer;">
+  Copy Jalgaon Data
+</button>
+
     <button class="tab-button active" onclick="showTab('jalgaon-tab')">जळगाव जिल्हा</button>
     <button class="tab-button" onclick="showTab('khandesh-tab')">कान्हदेश</button>
   </div>
@@ -160,6 +164,33 @@
       document.getElementById(tabId).classList.add('active');
       event.target.classList.add('active');
     }
-  </script>
+  </script><script>
+  function copyJalgaonData() {
+    const jalgaonKeys = Object.keys(cities).filter(key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c)));
+
+    // Get city names and temperatures
+    const formattedData = jalgaonKeys.map(key => {
+      const element = document.getElementById(key);
+      const rawText = element.textContent || element.innerText;
+      const parts = rawText.split("-");
+      if (parts.length < 2) return '';
+      const city = parts[0].trim().padEnd(15, ' ');
+      const temp = parts[1].trim();
+      return `${city}- ${temp}`;
+    }).join('\n');
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(formattedData).then(() => {
+      alert("Jalgaon weather data copied to clipboard!");
+    }).catch(err => {
+      alert("Failed to copy data.");
+      console.error(err);
+    });
+  }
+</script>
+
+
+
+  
 </body>
 </html>
