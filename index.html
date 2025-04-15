@@ -166,32 +166,27 @@
   
   <script>
   function copyJalgaonData() {
-  const jalgaonKeys = Object.keys(cities).filter(
-    key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c))
-  );
+    const jalgaonKeys = Object.keys(cities).filter(key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c)));
 
-  // Filter and sort Jalgaon data
-  const jalgaonSorted = temperatureData
-    .filter(t => jalgaonKeys.includes(t.elementId))
-    .sort((a, b) => b.temperature - a.temperature);
+    // Get city names and temperatures
+    const formattedData = jalgaonKeys.map(key => {
+      const element = document.getElementById(key);
+      const rawText = element.textContent || element.innerText;
+      const parts = rawText.split("-");
+      if (parts.length < 2) return '';
+      const city = parts[0].trim().padEnd(15, ' ');
+      const temp = parts[1].trim();
+      return `${city}- ${temp}`;
+    }).join('\n');
 
-  // Format for clipboard
-  const formattedData = jalgaonSorted.map(item => {
-    const city = item.elementId.split('-')[0];
-    const label = city.charAt(0).toUpperCase() + city.slice(1);
-    const temp = item.temperature + "°C";
-    return `${label.padEnd(15, ' ')}- ${temp}`;
-  }).join('\n');
-
-  // Copy to clipboard
-  navigator.clipboard.writeText(formattedData).then(() => {
-    alert("Sorted Jalgaon weather data copied to clipboard!");
-  }).catch(err => {
-    alert("Failed to copy data.");
-    console.error(err);
-  });
-}
-
+    // Copy to clipboard
+    navigator.clipboard.writeText(formattedData).then(() => {
+      alert("Jalgaon weather data copied to clipboard!");
+    }).catch(err => {
+      alert("Failed to copy data.");
+      console.error(err);
+    });
+  }
 </script>
 
 
