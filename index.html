@@ -54,6 +54,7 @@
 <body>
   <div class="tabs">
     <button class="tab-button" onclick="copyJalgaonData()">Copy</button>
+<button id="sort-button" class="tab-button" onclick="toggleSortOrder()">🔽 Sort</button>
 
     <button class="tab-button active" onclick="showTab('jalgaon-tab')">जळगाव जिल्हा</button>
     <button class="tab-button" onclick="showTab('khandesh-tab')">कान्हदेश</button>
@@ -189,6 +190,44 @@
   }
 </script>
 
+<script>
+  let sortDescending = true;
+
+  function toggleSortOrder() {
+    sortDescending = !sortDescending;
+    document.getElementById('sort-button').innerHTML = sortDescending ? '🔽 Sort' : '🔼 Sort';
+    renderSortedTemperatures(); // Call the same render function again to apply sorting
+  }
+
+  function renderSortedTemperatures() {
+    const jalgaonKeys = Object.keys(cities).filter(key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c)));
+    const khandeshKeys = Object.keys(cities).filter(key => ["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c)));
+
+    const jalgaonSorted = temperatureData
+      .filter(t => jalgaonKeys.includes(t.elementId))
+      .sort((a, b) => sortDescending ? b.temperature - a.temperature : a.temperature - b.temperature);
+
+    const khandeshSorted = temperatureData
+      .filter(t => khandeshKeys.includes(t.elementId))
+      .sort((a, b) => b.temperature - a.temperature); // Khandesh stays descending always
+
+    // Render Jalgaon
+    jalgaonSorted.forEach(item => {
+      const city = item.elementId.split('-')[0];
+      const emoji = item.temperature > 43 ? " 🔥" : "";
+      const textClass = item.temperature > 43 ? "highlight" : "";
+      document.getElementById(item.elementId).innerHTML =
+        `<span class="${textClass}">${city.charAt(0).toUpperCase() + city.slice(1)} - ${item.temperature}°C${emoji}</span>`;
+    });
+
+    // Render Khandesh
+    khandeshSorted.forEach(item => {
+      const city = item.elementId.split('-')[0];
+      document.getElementById(item.elementId).textContent =
+        `${city.charAt(0).toUpperCase() + city.slice(1)} - ${item.temperature}°C`;
+    });
+  }
+</script>
 
 
   
