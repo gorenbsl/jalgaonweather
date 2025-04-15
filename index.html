@@ -53,9 +53,7 @@
 </head>
 <body>
   <div class="tabs">
-    <button onclick="copyJalgaonData()" style="margin-bottom: 20px; padding: 10px 20px; border-radius: 10px; background-color: #4caf50; color: white; border: none; cursor: pointer;">
-  Copy Jalgaon Data
-</button>
+    <button class="tab-button" onclick="copyJalgaonData()">Copy</button>
 
     <button class="tab-button active" onclick="showTab('jalgaon-tab')">जळगाव जिल्हा</button>
     <button class="tab-button" onclick="showTab('khandesh-tab')">कान्हदेश</button>
@@ -164,29 +162,36 @@
       document.getElementById(tabId).classList.add('active');
       event.target.classList.add('active');
     }
-  </script><script>
+  </script>
+  
+  <script>
   function copyJalgaonData() {
-    const jalgaonKeys = Object.keys(cities).filter(key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c)));
+  const jalgaonKeys = Object.keys(cities).filter(
+    key => key.includes("-weather") && !["dhule", "nashik", "nandurbar"].some(c => key.startsWith(c))
+  );
 
-    // Get city names and temperatures
-    const formattedData = jalgaonKeys.map(key => {
-      const element = document.getElementById(key);
-      const rawText = element.textContent || element.innerText;
-      const parts = rawText.split("-");
-      if (parts.length < 2) return '';
-      const city = parts[0].trim().padEnd(15, ' ');
-      const temp = parts[1].trim();
-      return `${city}- ${temp}`;
-    }).join('\n');
+  // Filter and sort Jalgaon data
+  const jalgaonSorted = temperatureData
+    .filter(t => jalgaonKeys.includes(t.elementId))
+    .sort((a, b) => b.temperature - a.temperature);
 
-    // Copy to clipboard
-    navigator.clipboard.writeText(formattedData).then(() => {
-      alert("Jalgaon weather data copied to clipboard!");
-    }).catch(err => {
-      alert("Failed to copy data.");
-      console.error(err);
-    });
-  }
+  // Format for clipboard
+  const formattedData = jalgaonSorted.map(item => {
+    const city = item.elementId.split('-')[0];
+    const label = city.charAt(0).toUpperCase() + city.slice(1);
+    const temp = item.temperature + "°C";
+    return `${label.padEnd(15, ' ')}- ${temp}`;
+  }).join('\n');
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(formattedData).then(() => {
+    alert("Sorted Jalgaon weather data copied to clipboard!");
+  }).catch(err => {
+    alert("Failed to copy data.");
+    console.error(err);
+  });
+}
+
 </script>
 
 
